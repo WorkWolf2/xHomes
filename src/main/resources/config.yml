@@ -1,0 +1,116 @@
+#--------------------------
+#
+#xHomes
+#
+#Made by CurryMan
+#
+#--------------------------
+
+#=====PLACEHOLDERS=====
+#
+#{home} - The name of the player's home.
+#{location} - The exact co-ordinates of the home. ONLY RELEVANT FOR HOME ITEMS LORE
+#{world} - The world the home is in. ONLY RELEVANT FOR HOME ITEMS LORE
+#{seconds} - Seconds left before teleporting. ONLY RELEVANT FOR THE TELEPORTING MESSAGES.
+#
+#======================
+
+
+gui:
+  size: 54  # Size of the home GUI (must be a multiple of 9)
+  title: "&8Homes"
+
+homes:
+  material: RED_BED
+  name: "{home}" #LEAVE THIS AS IT IS; DO NOT TOUCH
+  slot-ranges:
+    - 11-15
+    - 20-24
+    - 29-33
+    - 38-42
+  item-lore: # Lore for the home items
+    - " "
+    - "&f&m                                            "
+    - "&7Name: &c{home}"
+    - "&7Location: &c{location}"
+    - "&7World: &c{world}"
+    - " "
+    - "&aLeft Click &7to &ateleport"
+    - "&cDrop Key &7to &cdelete"
+    - " "
+    - "&c&lWARNING &f| &7You cannot undo deleting a home!"
+    - "&f&m                                            "
+next-page-item:
+  material: PAPER
+  name: "&a&lNEXT PAGE"
+  lore:
+    - " "
+    - "&7Click to navigate to"
+    - "&7the next page of the GUI"
+    - " "
+  slot: 53
+
+previous-page-item:
+  material: PAPER
+  name: "&c&lPREVIOUS PAGE"
+  lore:
+    - " "
+    - "&7Click to navigate to"
+    - "&7the previous page of the GUI"
+    - " "
+  slot: 45
+
+
+
+info-item:
+  slot: 4
+  name: "&f&lSETTINGS"
+  material: BOOK
+  lore:
+    - " "
+    - "&7Player &f| &c{player}"
+    - "&7Homes &f| &c{homes}"
+    - " "
+    - "&f&l» &8[&f/&csethome&8] &7<&cname&7> to &ccreate &7a home"
+    - "&f&l» &8[&f/&chomes&8] &7to open this menu"
+    - " "
+    - "&f&l» &a&lRIGHT CLICK &7to toggle &aLocation Visibility"
+    - " "
+filler-item:
+  name: " "
+  material: WHITE_STAINED_GLASS_PANE
+  slot-ranges:
+    - 0-10
+    - 16-19
+    - 25-28
+    - 34-37
+    - 43-53
+
+teleport:
+  delay: 5  # Delay before teleporting
+  cancel-on-move: true #Whether or not to cancel the teleport on movement
+
+messages:  #All messages of the plugin.
+  teleport-start: "&a&lSTARTED! &7Teleporting in &c{seconds} seconds. &4&lDO NOT MOVE"
+  actionbar: "&c&l{seconds}"
+  title: "&4&lDon't Move"
+  subtitle: "&7You will be teleported in &c{seconds}"
+  teleport-complete: "&a&lTELEPORTED! &7You are now in Home &c{home}&7!"
+  no-homes: "&c&lNO HOMES! &7You have no homes! Create one with &8[&f/&csethome&8]"
+  no-home-found: "&c&lERROR! &7Home &c'{home}' &7not found!"
+  noPerms: "&c&lERROR! &7You are missing the correct permissions"
+  reload: "&a&lDONE! &aConfiguration reloaded!"
+  home-deleted: "&a&lDONE! &7Home &c{home} &7has been deleted!"
+  already-in-progress: "&c&lWAIT! &7You still have a pending teleportation!"
+  cancelled-move: "&c&lCANCELLED! &7You moved before you got teleported!"
+  location-toggled-on: "&a&lDONE! &7Locations are now &chidden!"
+  location-toggled-off: "&a&lDONE! &7Locations are now &ashown!"
+
+sounds:
+  enabled: true #Whether or not these sounds should be enabled
+  gui_open: "BLOCK_NOTE_BLOCK_HAT" # Sound when the GUI is opened
+  left_click: "ENTITY_ITEM_PICKUP" # Sound for clicking on a Home item
+  right_click: "ENTITY_ITEM_BREAK" # Sound for toggling location
+  drop_item: "ENTITY_ITEM_PICKUP" # Sound for deleting a home
+  teleport: "ENTITY_ENDERMAN_TELEPORT" # Sound for when the player teleports
+  countdown: "BLOCK_NOTE_BLOCK_PLING" #Sound for the countdown
