@@ -50,6 +50,12 @@ next-page-item:
     - " "
   slot: 53
 
+world-replacements:
+  world_nether: "&c&lNETHER"
+  world_the_end: "&f&lEND"
+  world: "&a&lOVERWORLD" #OVERWORLD
+
+
 previous-page-item:
   material: PAPER
   name: "&c&lPREVIOUS PAGE"
