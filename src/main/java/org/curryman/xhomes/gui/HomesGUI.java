@@ -1,6 +1,7 @@
 package org.curryman.xhomes.gui;
 
 import com.earth2me.essentials.User;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -75,12 +76,19 @@ public class HomesGUI {
             fillerItem = new ItemStack(Material.valueOf(fillerMaterial));
         }
         ItemMeta fillerMeta = fillerItem.getItemMeta();
-        fillerMeta.setDisplayName(ConfigManager.getMessage("filler-item.name"));
-        fillerItem.setItemMeta(fillerMeta);
-
-        for (int slot : getFillerSlotRanges()) {
-            gui.setItem(slot, fillerItem);
+        if (fillerMeta != null) {
+            fillerMeta.setDisplayName(ConfigManager.getMessage("filler-item.name"));
         }
+        fillerItem.setItemMeta(fillerMeta);
+        Boolean isFillerAir = ConfigManager.getMessage("filler-item.material").equalsIgnoreCase("AIR");
+
+
+        if (!isFillerAir) {
+            for (int slot : getFillerSlotRanges()) {
+                gui.setItem(slot, fillerItem);
+            }
+        }
+
 
         List<String> homes = user.getHomes();
         int totalHomes = getTotalHomes(user);
@@ -129,11 +137,11 @@ public class HomesGUI {
                         if (locationToggled.contains(player)) {
                             formattedLine = line.replace("{home}", homeName)
                                     .replace("{location}", ChatColor.translateAlternateColorCodes('&', "&c&lHIDDEN"))
-                                    .replace("{world}", world);
+                                    .replace("{world}", translateWorldName(world));
                         } else {
                             formattedLine = line.replace("{home}", homeName)
                                     .replace("{location}", locationToString(homeLocation))
-                                    .replace("{world}", world);
+                                    .replace("{world}", translateWorldName(world));
                         }
                         lore.add(ChatColor.translateAlternateColorCodes('&', formattedLine));
                     }
@@ -227,6 +235,7 @@ public class HomesGUI {
         } else {
             infoItem = new ItemStack(Material.valueOf(infoItemMaterial));
         }
+
         int infoSlot = ConfigManager.getInt("info-item.slot");
         ItemMeta meta = infoItem.getItemMeta();
         List<String> infoLoreLines = ConfigManager.getList("info-item.lore");
@@ -245,7 +254,13 @@ public class HomesGUI {
         }
 
         infoItem.setItemMeta(meta);
-        gui.setItem(infoSlot, infoItem);
+        Boolean isInfoAir = ConfigManager.getMessage("info-item.material").equalsIgnoreCase("AIR");
+
+        if (!isInfoAir) {
+            gui.setItem(infoSlot, infoItem);
+        }
+
+
 
         String openSound = ConfigManager.getMessage("sounds.gui_open");
         player.playSound(player.getLocation(), Sound.valueOf(openSound), 1.0F, 1.0F);
@@ -258,7 +273,21 @@ public class HomesGUI {
     private static String locationToString (Location location){
         return "X: " + location.getBlockX() + " Y: " + location.getBlockY() + " Z: " + location.getBlockZ();
     }
+    public static String translateWorldName(String world) {
+        String netherReplacement = ConfigManager.getMessage("world-replacements.world_nether");
+        String endReplacement = ConfigManager.getMessage("world-replacements.world_the_end");
+        String worldReplacement = ConfigManager.getMessage("world-replacements.world");
 
+        if (world.equalsIgnoreCase("world_the_end")){
+            return endReplacement;
+        } else if (world.equalsIgnoreCase("world_nether")) {
+            return netherReplacement;
+        } else if (world.equalsIgnoreCase("world")) {
+            return worldReplacement;
+        } else {
+            return world;
+        }
+    }
     public static int getTotalHomes (User user){
         List<String> homes = user.getHomes();
         int homeCount = 0;
