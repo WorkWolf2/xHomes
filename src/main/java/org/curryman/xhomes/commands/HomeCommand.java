@@ -66,7 +66,7 @@ public class HomeCommand implements CommandExecutor {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&cxHomes&f]"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Version &c1.0"));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Version &c1.1"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Made by &cCurryMan"));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
         }
