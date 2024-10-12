@@ -41,9 +41,13 @@ public class HomeClickListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
+        ItemStack clickedItem = event.getCurrentItem();
+        if (clickedItem == null || !clickedItem.hasItemMeta()) return;
+        String homeName = clickedItem.getItemMeta().getDisplayName().replace(ConfigManager.getMessage("gui.homes.name").replace("{home}", ""), "");
+        int currentPage = HomesGUI.getPage(player);
+        String Page = Integer.toString(currentPage);
 
-
-        if (event.getView().getTitle().equals(ConfigManager.getMessage("gui.title"))) {
+        if (event.getView().getTitle().equals(ConfigManager.getMessage("gui.title").replace("{page}", Page))) {
 
             event.setCancelled(true);
 
@@ -57,11 +61,10 @@ public class HomeClickListener implements Listener {
                 event.setCancelled(true);
             }
 
-            ItemStack clickedItem = event.getCurrentItem();
-            if (clickedItem == null || !clickedItem.hasItemMeta()) return;
 
 
-            String homeName = clickedItem.getItemMeta().getDisplayName().replace(ConfigManager.getMessage("gui.homes.name").replace("{home}", ""), "");
+
+
 
 
             User essentialsUser = XHomes.getInstance().getEssentials().getUser(player);
@@ -73,7 +76,7 @@ public class HomeClickListener implements Listener {
                 event.setCancelled(true);
             }
 
-            int currentPage = HomesGUI.getPage(player);
+
 
 
             event.setCancelled(true);
@@ -122,11 +125,17 @@ public class HomeClickListener implements Listener {
                                         player.sendMessage(ChatColor.RED + "Home location is not set or invalid!");
                                         return;
                                     }
-                                    String seconds = Integer.toString(delay);
-                                    player.sendMessage(ConfigManager.getMessage("messages.teleport-start").replace("{seconds}", seconds));
-                                    teleportWithCountdown(player, homeLocation, delay, true, homeName);
+
                                     String leftClickSound = ConfigManager.getMessage("sounds.left_click");
                                     player.playSound(player.getLocation(), Sound.valueOf(leftClickSound), 1.0F, 1.0F);
+                                    if (player.hasPermission("xhomes.cooldown-bypass")) {
+                                        player.teleport(homeLocation);
+                                        player.sendMessage(ConfigManager.getMessage("messages.teleport-complete").replace("{home}", homeName));
+                                    }
+                                    else {
+                                        teleportWithCountdown(player, homeLocation, delay, true, homeName);
+                                    }
+
 
                                     new BukkitRunnable() {
                                         @Override
@@ -169,7 +178,8 @@ public class HomeClickListener implements Listener {
 
     public static void teleportWithCountdown(Player player, Location location, int countdown, boolean cancelOnMove, String homeName) {
         Location initialLocation = player.getLocation();
-
+        String Countdown = Integer.toString(countdown);
+        player.sendMessage(ConfigManager.getMessage("messages.teleport-start").replace("{seconds}", Countdown));
         new BukkitRunnable() {
             int timeLeft = countdown;
 
