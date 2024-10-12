@@ -32,11 +32,16 @@ public class HomeCommand implements CommandExecutor {
 
         if (label.equalsIgnoreCase("homes") || label.equalsIgnoreCase("home") && args.length == 0) {
             try {
-
                 if (user == null || !user.hasValidHomes()) {
                     player.sendMessage(ConfigManager.getMessage("messages.no-homes"));
                 } else {
-                    HomesGUI.openHomesGUI(player, user, 1);
+                    if (sender.hasPermission("xhomes.gui")) {
+                        HomesGUI.openHomesGUI(player, user, 1);
+                    }
+                    else  {
+                        player.sendMessage(ConfigManager.getMessage("messages.noPerms"));
+                    }
+
                 }
             } catch (Exception e) {
                 player.sendMessage("Failed to fetch homes. Check console");
@@ -54,8 +59,20 @@ public class HomeCommand implements CommandExecutor {
             Location homeLocation = user.getHome(homeName);
             String delay = Integer.toString(countdown);
             if (homes.contains(homeName)) {
-                sender.sendMessage(ConfigManager.getMessage("messages.teleport-start").replace("{seconds}", delay));
-                HomeClickListener.teleportWithCountdown(player, homeLocation, countdown, true, homeName);
+
+                if (sender.hasPermission("xhomes.individual")) {
+                    if (sender.hasPermission("xhomes.cooldown-bypass")) {
+                        ((Player) sender).teleport(homeLocation);
+                        sender.sendMessage(ConfigManager.getMessage("messages.teleport-complete").replace("{home}", homeName));
+                        return true;
+                    }
+                    else {
+                        HomeClickListener.teleportWithCountdown(player, homeLocation, countdown, true, homeName);
+                    }
+                }
+                else  {
+                    player.sendMessage(ConfigManager.getMessage("messages.noPerms"));
+                }
             }
             else {
                 player.sendMessage(ConfigManager.getMessage("messages.no-home-found").replace("{home}", homeName));
@@ -63,12 +80,17 @@ public class HomeCommand implements CommandExecutor {
             }
 
         } else if (label.equalsIgnoreCase("xhomes") && args.length == 0) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&cxHomes&f]"));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Version &c1.1"));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Made by &cCurryMan"));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
+            if (sender.hasPermission("xhomes.admin")) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&cxHomes&f]"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Version &c1.0.2"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Made by &cCurryMan"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', " "));
+            }
+            else  {
+                player.sendMessage(ConfigManager.getMessage("messages.noPerms"));
+            }
         }
 
         return true;
