@@ -58,8 +58,9 @@ public class HomesGUI {
 
     public static void openHomesGUI(Player player, User user, int page) {
         List<Integer> slotRanges = getSlotRanges();
+        String Page = Integer.toString(page);
         int size = ConfigManager.getInt("gui.size");
-        Inventory gui = Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', ConfigManager.getMessage("gui.title")));
+        Inventory gui = Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', ConfigManager.getMessage("gui.title").replace("{page}", Page)));
         int homesPerPage = slotRanges.size();
 
         String fillerMaterial = ConfigManager.getMessage("filler-item.material");
