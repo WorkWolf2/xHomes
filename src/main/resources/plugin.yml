@@ -1,6 +1,7 @@
 name: xHomes
-version: '1.1'
+version: '1.0.2'
 main: org.curryman.xhomes.XHomes
+api-version: '1.17'
 commands:
   homes:
     description: Player command for the plugin
@@ -8,17 +9,22 @@ commands:
     description: Player command for plugin
   xhomes:
     description: Admin commands for the plugin
-    permission: xhomes.admin
+
 
 permissions:
-  xhomes.use:
-    description: Let players use basic commands
+  xhomes.gui:
+    description: Let players open the GUI
     default: not op
+  xhomes.individual:
+    description: Let players teleport to individual homes via commands (NOT the GUI)
+    default: not op
+  xhomes.cooldown-bypass:
+    description: Let players instantly teleport to their homes, with no cooldown
+    default: op
   xhomes.admin:
     description: Let players use admin commands
     default: op
-  xhomes.homes.#:
-    description: Lets players set a number of homes
+
 
 softdepend:
   - HeadDatabase
