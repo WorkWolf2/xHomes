@@ -38,7 +38,7 @@ public class XHomes extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(ANSI_GREEN + "Config Initialised!" + ANSI_RESET);
         getServer().getConsoleSender().sendMessage(ANSI_GREEN + "xHomes has been enabled successfully!" + ANSI_RESET);
         getServer().getConsoleSender().sendMessage("");
-        getServer().getConsoleSender().sendMessage(ANSI_YELLOW + "Version 1.1" + ANSI_RESET);
+        getServer().getConsoleSender().sendMessage(ANSI_YELLOW + "Version 1.0.2" + ANSI_RESET);
         getServer().getConsoleSender().sendMessage(ANSI_YELLOW + "Made by CurryMan" + ANSI_RESET);
         getServer().getConsoleSender().sendMessage(ANSI_YELLOW + "Get it now on SpigotMC!" + ANSI_RESET);
         getServer().getConsoleSender().sendMessage("");
