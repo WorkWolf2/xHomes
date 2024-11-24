@@ -56,7 +56,7 @@ public class XHomes extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new HomeClickListener(), this);
 
-        getLogger().info(ANSI_GREEN + "xHomes Sartup complete!");
+        getLogger().info(ANSI_GREEN + "xHomes Sartup complete!" + ANSI_RESET);
     }
 
     @Override
