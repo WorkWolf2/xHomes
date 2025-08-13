@@ -1,6 +1,7 @@
 package org.curryman.xhomes;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.curryman.xhomes.commands.HomeCommand;
@@ -9,12 +10,17 @@ import org.curryman.xhomes.listeners.HomeClickListener;
 import org.curryman.xhomes.managers.ConfigManager;
 import org.bstats.bukkit.Metrics;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class XHomes extends JavaPlugin {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_GRAY = "\u001B[90m";
     public static final String ANSI_RED = "\u001B[31m";
+
+    public static HashMap<UUID, User> hashMap = new HashMap<>();
 
     private static XHomes instance;
     private Essentials essentials;

@@ -36,14 +36,16 @@ public class HomeClickListener implements Listener {
     int delay = ConfigManager.getInt("teleport.delay");
 
     private Map<UUID, Boolean> teleportingPlayers = new HashMap<>();
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        Player player = (Player) event.getWhoClicked();
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || !clickedItem.hasItemMeta()) return;
+
         String homeName = clickedItem.getItemMeta().getDisplayName().replace(ConfigManager.getMessage("gui.homes.name").replace("{home}", ""), "");
+
         int currentPage = HomesGUI.getPage(player);
         String Page = Integer.toString(currentPage);
 
@@ -55,19 +57,17 @@ public class HomeClickListener implements Listener {
                 event.setCancelled(true);
             }
 
-
-
             if (event.getClick() == ClickType.SHIFT_RIGHT) {
                 event.setCancelled(true);
             }
 
-
-
-
-
-
-
             User essentialsUser = XHomes.getInstance().getEssentials().getUser(player);
+
+            if (XHomes.hashMap.containsKey(player.getUniqueId())) {
+                essentialsUser = XHomes.hashMap.get(player.getUniqueId());
+            }
+
+            System.out.println(essentialsUser.getName());
 
             Boolean itemName = clickedItem.getType().equals(Material.valueOf(ConfigManager.getMessage("homes.material")));
             Boolean infoItemName = clickedItem.getItemMeta().getDisplayName().equals(ConfigManager.getMessage("info-item.name"));
@@ -76,20 +76,21 @@ public class HomeClickListener implements Listener {
                 event.setCancelled(true);
             }
 
-
-
-
             event.setCancelled(true);
+
             if (event.isLeftClick()) {
+
                 if (event.isShiftClick()) {
                     event.setCancelled(true);
                     return;
                 }
+
                 if (clickedItem.getItemMeta().getDisplayName().equals(ConfigManager.getMessage("next-page-item.name"))) {
                     HomesGUI.openHomesGUI(player, essentialsUser, currentPage + 1);
                 } else if (clickedItem.getItemMeta().getDisplayName().equals(ConfigManager.getMessage("previous-page-item.name"))) {
                     HomesGUI.openHomesGUI(player, essentialsUser, currentPage - 1);
                 }
+
                 event.setCancelled(true);
             }
 
@@ -104,8 +105,6 @@ public class HomeClickListener implements Listener {
                             List<String> homeNames = essentialsUser.getHomes();
 
                             if (homeNames.contains(homeName)) {
-
-
                                 if (!teleportingPlayers.getOrDefault(player.getUniqueId(), false)) {
                                     teleportingPlayers.put(player.getUniqueId(), true);
 
@@ -115,7 +114,7 @@ public class HomeClickListener implements Listener {
 
                                     Location homeLocation = null;
                                     try {
-                                        homeLocation = essentialsUser.getHome(homeName);
+                                        homeLocation = essentialsUser.getHome(homeName); // HERE
                                     } catch (Exception e) {
                                         player.sendMessage(ChatColor.RED + "Failed to find home location!");
                                         return;
@@ -130,6 +129,8 @@ public class HomeClickListener implements Listener {
                                     player.playSound(player.getLocation(), Sound.valueOf(leftClickSound), 1.0F, 1.0F);
                                     if (player.hasPermission("xhomes.cooldown-bypass")) {
                                         player.teleport(homeLocation);
+
+                                        XHomes.hashMap.remove(player.getUniqueId());
                                         player.sendMessage(ConfigManager.getMessage("messages.teleport-complete").replace("{home}", homeName));
                                     }
                                     else {
@@ -177,6 +178,7 @@ public class HomeClickListener implements Listener {
 
 
     public static void teleportWithCountdown(Player player, Location location, int countdown, boolean cancelOnMove, String homeName) {
+        XHomes.hashMap.remove(player.getUniqueId());
         Location initialLocation = player.getLocation();
         String Countdown = Integer.toString(countdown);
         player.sendMessage(ConfigManager.getMessage("messages.teleport-start").replace("{seconds}", Countdown));

@@ -1,7 +1,6 @@
 package org.curryman.xhomes.gui;
 
 import com.earth2me.essentials.User;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -13,6 +12,8 @@ import org.curryman.xhomes.utils.SkullUtils;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HomesGUI {
 
@@ -111,20 +112,24 @@ public class HomesGUI {
                 Location homeLocation = user.getHome(homeName);
 
                 String material = ConfigManager.getMessage("homes.material");
-                ItemStack homeItem;
+                ItemStack homeItem = null;
+
                 if (material.equalsIgnoreCase("PLAYER_HEAD")) {
                     String skin = ConfigManager.getMessage("homes.skin");
                     homeItem = SkullUtils.getCustomSkull(skin);
+
                 } else if (material.startsWith("hdb-")) {
                     String hdbId = material.split("-")[1];
                     HeadDatabaseAPI headDatabaseAPI = new HeadDatabaseAPI();
                     String homeSkin = headDatabaseAPI.getBase64(hdbId);
                     homeItem = SkullUtils.getCustomSkull(homeSkin);
+
                 } else {
-                    homeItem = new ItemStack(Material.valueOf(material));
+                    homeItem = new ItemStack(Material.valueOf(material.toUpperCase()));
                 }
 
                 ItemMeta meta = homeItem.getItemMeta();
+
                 List<String> loreLines = ConfigManager.getList("homes.item-lore");
                 String world = homeLocation.getWorld().getName();
                 List<String> lore = new ArrayList<>();
@@ -148,6 +153,11 @@ public class HomesGUI {
                     }
 
                     meta.setLore(lore);
+
+                    if (material.equalsIgnoreCase("PAPER")) {
+                        meta.setCustomModelData(ConfigManager.getInt("homes.cmd"));
+                    }
+
                     homeItem.setItemMeta(meta);
                 }
 

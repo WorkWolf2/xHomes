@@ -2,8 +2,10 @@ package org.curryman.xhomes.commands;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,19 +22,37 @@ import java.util.List;
 public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Only players can use this command.");
             return true;
         }
-        Player player = (Player) sender;
-        User user = XHomes.getInstance().getEssentials().getUser(player);
+
+        User user;
+
+        if (args.length == 0) {
+            user = XHomes.getInstance().getEssentials().getUser(player);
+        } else {
+            if (player.hasPermission("xhomes.home.others")) {
+                Player target = Bukkit.getPlayer(args[0]);
+
+                if (target != null) {
+                    user = XHomes.getInstance().getEssentials().getUser(target);
+                    XHomes.hashMap.put(player.getUniqueId(), user);
+                } else {
+                    user = XHomes.getInstance().getEssentials().getUser(player);
+                }
+            } else {
+                user = XHomes.getInstance().getEssentials().getUser(player);
+            }
+        }
+
         List<String> homes = user.getHomes();
         int countdown = ConfigManager.getInt("teleport.delay");
 
 
         if (label.equalsIgnoreCase("homes") || label.equalsIgnoreCase("home") && args.length == 0) {
             try {
-                if (user == null || !user.hasValidHomes()) {
+                if (!user.hasValidHomes()) {
                     player.sendMessage(ConfigManager.getMessage("messages.no-homes"));
                 } else {
                     if (sender.hasPermission("xhomes.gui")) {

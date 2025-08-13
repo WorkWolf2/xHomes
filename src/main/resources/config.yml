@@ -22,6 +22,7 @@ gui:
 
 homes:
   material: RED_BED
+  cmd: 1000
   name: "{home}" #LEAVE THIS AS IT IS; DO NOT TOUCH
   slot-ranges:
     - 11-15

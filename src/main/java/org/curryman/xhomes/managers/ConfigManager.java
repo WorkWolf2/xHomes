@@ -1,7 +1,6 @@
 package org.curryman.xhomes.managers;
 
 import com.earth2me.essentials.libs.kyori.adventure.platform.facet.Facet;
-import com.sun.org.apache.xerces.internal.xs.StringList;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

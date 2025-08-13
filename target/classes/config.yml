@@ -22,6 +22,7 @@ gui:
 
 homes:
   material: RED_BED
+  cmd: 1000
   name: "{home}" #LEAVE THIS AS IT IS; DO NOT TOUCH
   slot-ranges:
     - 11-15
@@ -49,6 +50,12 @@ next-page-item:
     - "&7the next page of the GUI"
     - " "
   slot: 53
+
+world-replacements:
+  world_nether: "&c&lNETHER"
+  world_the_end: "&f&lEND"
+  world: "&a&lOVERWORLD" #OVERWORLD
+
 
 previous-page-item:
   material: PAPER
